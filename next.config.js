@@ -1,14 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-<<<<<<< HEAD
-    
-=======
+
      typescript: {
       ignoreBuildErrors: true,
-     }
+     },
 
-     
->>>>>>> ead9aad (commit)
+    
   reactStrictMode: true,
   swcMinify: true,
   images: {
