@@ -24,18 +24,17 @@ const Home = ({ videos }: IProps) => {
 
 export default Home;
 
-export const getServerSideProps = async ({
-  query: { topic },
-}: {
-  query: { topic: string };
-}) => {
-  let response = await axios.get(`${BASE_URL}/api/post`);
+export const getServerSideProps = async ({ query }: { query: { topic?: string } }) => {
+  try {
+    const url = query.topic 
+      ? `${BASE_URL}/api/discover/${query.topic}`
+      : `${BASE_URL}/api/post`;
 
-  if(topic) {
-    response = await axios.get(`${BASE_URL}/api/discover/${topic}`);
+    const response = await axios.get(url);
+    
+    return { props: { videos: response.data } };
+  } catch (error) {
+    console.error('Data fetching failed:', error);
+    return { props: { videos: [] } };
   }
-  
-  return {
-    props: { videos: response.data },
-  };
 };
