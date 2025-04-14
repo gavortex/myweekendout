@@ -46,6 +46,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
           <video
             loop
             src={videoUrl}
+            poster={`${videoUrl}#t=0.1`}
             className='w-[300px] md:w-full rounded-xl cursor-pointer'
           ></video>
         </Link>
