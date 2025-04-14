@@ -7,9 +7,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'GET') {
     const { id } = req.query;
 
-    const query = singleUserQuery(id);
-    const userVideosQuery = userCreatedPostsQuery(id);
-    const userLikedVideosQuery = userLikedPostsQuery(id);
+    const query = singleUserQuery(id as string);
+    const userVideosQuery = userCreatedPostsQuery(id as string);
+    const userLikedVideosQuery = userLikedPostsQuery(id as string);
 
     const user = await client.fetch(query);
     const userVideos = await client.fetch(userVideosQuery);
