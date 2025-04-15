@@ -47,7 +47,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
             loop
             src={videoUrl}
             poster={`${videoUrl}#t=0.1`}
-            className='w-[250px] md:w-full rounded-xl cursor-pointer'
+            className='w-[300px] h-[700px] md:w-full rounded-xl ml-1 cursor-pointer'
           ></video>
         </Link>
             <div className='flex gap-2 -mt-8 items-center ml-4'>
@@ -73,8 +73,8 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
             <Link href={`/profile/${postedBy?._id}`}>
               <>
                 <Image
-                  width={62}
-                  height={62}
+                  width={40}
+                  height={40}
                   className=' rounded-full'
                   src={postedBy?.image}
                   alt='user-profile'
@@ -113,8 +113,8 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
               loop
               ref={videoRef}
               src={videoUrl}
-              poster={`${videoUrl}#t=0.1`}
-              className='lg:w-[700px] h-[300px] md:h-[400px] md:w-[350px] lg:h-[528px] w-[300px] rounded-2xl cursor-pointer bg-gray-900'
+              poster={`${videoUrl}#t=0.2`}
+              className='lg:w-[800px] h-[500px] md:h-[500px] md:w-[350px] lg:h-[528px] w-[300px] rounded-2xl cursor-pointer bg-gray-900'
             ></video>
           </Link>
 
