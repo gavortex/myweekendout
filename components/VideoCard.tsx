@@ -46,7 +46,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
             loop
             src={video?.asset.url}
             ref={videoRef}
-             className='w-[500px] h-[700px] md:w-full rounded-xl cursor-pointer'
+             className='w-[500px] h-[600px] md:w-full rounded-xl cursor-pointer'
            
           />
         </Link>
@@ -109,7 +109,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
               loop
               ref={videoRef}
               src={video?.asset.url}
-             className='lg:w-[700px] h-[700px] md:h-[700px] md:w-[350px] lg:h-[728px] w-[350px] rounded-2xl cursor-pointer bg-gray-800'
+             className='lg:w-[700px] h-[700px] md:h-[600px] md:w-[350px] lg:h-[728px] w-[350px] rounded-2xl cursor-pointer bg-gray-800'
             />
           </Link>
 
