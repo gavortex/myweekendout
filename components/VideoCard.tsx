@@ -71,8 +71,8 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
         <div className='md:w-16 md:h-16 w-10 h-10'>
           <Link href={`/profile/${postedBy?._id}`}>
             <Image
-              width={30}
-              height={30}
+              width={24}
+              height={24}
               className='rounded-full'
               src={postedBy?.image}
               alt='user-profile'
@@ -82,7 +82,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
         </div>
         <div>
           <Link href={`/profile/${postedBy?._id}`}>
-            <div className='flex items-center gap-2'>
+            <div className='flex items-center gap-1'>
               <p className='flex gap-2 items-center md:text-md font-bold text-red'>
                 {postedBy.userName}
                 <GoVerified className='text-blue-400 text-md' />
@@ -93,7 +93,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
             </div>
           </Link>
           <Link href={`/detail/${_id}`}>
-            <p className='mt-2 font-normal'>{caption}</p>
+            <p className='mt-1 font-xs'>{caption}</p>
           </Link>
         </div>
       </div>
@@ -109,7 +109,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
               loop
               ref={videoRef}
               src={video?.asset.url}
-             className='lg:w-[700px] h-[800px] md:h-[500px] md:w-[350px] lg:h-[728px] w-[300px] rounded-2xl cursor-pointer bg-gray-600'
+             className='lg:w-[700px] h-[600px] md:h-[500px] md:w-[350px] lg:h-[728px] w-[300px] rounded-2xl cursor-pointer bg-gray-600'
             />
           </Link>
 
