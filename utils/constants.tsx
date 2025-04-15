@@ -1,6 +1,6 @@
 import { BsCode, BsEmojiSunglasses } from 'react-icons/bs';
 import { GiCakeSlice, GiGalaxy, GiLipstick } from 'react-icons/gi';
-import { FaPaw, FaMedal, FaGamepad, FaMusic, FaPumpMedical } from 'react-icons/fa';
+import { FaPaw, FaMedal, FaGamepad, FaMusic, FaPumpMedical, FaMoneyBill } from 'react-icons/fa';
 
 export const topics = [
   {
@@ -8,8 +8,12 @@ export const topics = [
     icon: <BsCode />,
   },
   {
-    name: 'deblozay',
+    name: 'Deblozay',
     icon: <BsEmojiSunglasses />,
+  },
+  {
+    name: 'Finance',
+    icon: <FaMoneyBill />,
   },
   {
     name: 'Health',
