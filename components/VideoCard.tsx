@@ -9,7 +9,7 @@ import { BsPlay } from 'react-icons/bs';
 
 import { Video } from './../types';
 
-interface IProps {
+interface IProps {  
   post: Video;
   isShowingOnHome?: boolean;
 }
@@ -47,7 +47,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
             loop
             src={videoUrl}
             poster={`${videoUrl}#t=0.1`}
-            className='w-[300px] md:w-full rounded-xl cursor-pointer'
+            className='w-[250px] md:w-full rounded-xl cursor-pointer'
           ></video>
         </Link>
             <div className='flex gap-2 -mt-8 items-center ml-4'>
