@@ -1,15 +1,16 @@
+'use client';
+
 import React, { useEffect, useRef, useState } from 'react';
 import { NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { HiVolumeUp, HiVolumeOff } from 'react-icons/hi';
-import { BsFillPlayFill, BsFillPauseFill } from 'react-icons/bs';
+import { BsFillPlayFill, BsFillPauseFill, BsPlay } from 'react-icons/bs';
 import { GoVerified } from 'react-icons/go';
-import { BsPlay } from 'react-icons/bs';
 
 import { Video } from './../types';
 
-interface IProps {  
+interface IProps {
   post: Video;
   isShowingOnHome?: boolean;
 }
@@ -20,6 +21,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
   const [isVideoMuted, setIsVideoMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  
   const onVideoPress = () => {
     if (playing) {
       videoRef?.current?.pause();
@@ -36,69 +38,63 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
     }
   }, [isVideoMuted]);
 
-  const videoUrl = video?.asset?.url;
-  if (!videoUrl) return null;
-
-  if(!isShowingOnHome) {
+  if (!isShowingOnHome) {
     return (
       <div>
         <Link href={`/detail/${_id}`}>
           <video
             loop
-            src={videoUrl}
-            poster={`${videoUrl}#t=0.1`}
-            className='w-[300px] h-[700px] md:w-full rounded-xl ml-1 cursor-pointer'
-          ></video>
+            src={video?.asset.url}
+            ref={videoRef}
+             className='w-[500px] h-[800px] md:w-full rounded-xl cursor-pointer'
+           
+          />
         </Link>
-            <div className='flex gap-2 -mt-8 items-center ml-4'>
-              <p className='text-white text-lg font-medium flex gap-1 items-center'>
-                <BsPlay className='text-2xl' />
-                {likes?.length || 0}
-              </p>
-            </div>
+        <div className='flex gap-2 -mt-8 items-center ml-4'>
+          <p className='text-white text-lg font-medium flex gap-1 items-center'>
+            <BsPlay className='text-2xl text-red' />
+            {likes?.length || 0}
+          </p>
+        </div>
         <Link href={`/detail/${_id}`}>
           <p className='mt-5 text-md text-gray-800 cursor-pointer w-210'>
             {caption}
           </p>
         </Link>
       </div>
-    )
+    );
   }
 
   return (
     <div className='flex flex-col border-b-2 border-gray-200 pb-6'>
-      <div>
-        <div className='flex gap-3 p-2 cursor-pointer font-semibold rounded '>
-          <div className='md:w-16 md:h-16 w-10 h-10'>
-            <Link href={`/profile/${postedBy?._id}`}>
-              <>
-                <Image
-                  width={40}
-                  height={40}
-                  className=' rounded-full'
-                  src={postedBy?.image}
-                  alt='user-profile'
-                  layout='responsive'
-                />
-              </>
-            </Link>
-          </div>
-          <div>
-            <Link href={`/profile/${postedBy?._id}`}>
-              <div className='flex items-center gap-2'>
-                <p className='flex gap-2 items-center md:text-md font-bold text-red'>
-                  {postedBy.userName}{' '}
-                  <GoVerified className='text-blue-400 text-md' />
-                </p>
-                <p className='capitalize font-medium text-xs text-gray-500 hidden md:block'>
-                  {postedBy.userName}
-                </p>
-              </div>
-            </Link>
-            <Link href={`/detail/${_id}`}>
-              <p className='mt-2 font-normal '>{caption}</p>
-            </Link>
-          </div>
+      <div className='flex gap-3 p-2 cursor-pointer font-semibold rounded'>
+        <div className='md:w-16 md:h-16 w-10 h-10'>
+          <Link href={`/profile/${postedBy?._id}`}>
+            <Image
+              width={30}
+              height={30}
+              className='rounded-full'
+              src={postedBy?.image}
+              alt='user-profile'
+              layout='responsive'
+            />
+          </Link>
+        </div>
+        <div>
+          <Link href={`/profile/${postedBy?._id}`}>
+            <div className='flex items-center gap-2'>
+              <p className='flex gap-2 items-center md:text-md font-bold text-red'>
+                {postedBy.userName}
+                <GoVerified className='text-blue-400 text-md' />
+              </p>
+              <p className='capitalize font-medium text-xs text-gray-500 hidden md:block'>
+                {postedBy.userName}
+              </p>
+            </div>
+          </Link>
+          <Link href={`/detail/${_id}`}>
+            <p className='mt-2 font-normal'>{caption}</p>
+          </Link>
         </div>
       </div>
 
@@ -112,10 +108,9 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
             <video
               loop
               ref={videoRef}
-              src={videoUrl}
-              poster={`${videoUrl}#t=0.2`}
-              className='lg:w-[800px] h-[500px] md:h-[500px] md:w-[350px] lg:h-[528px] w-[300px] rounded-2xl cursor-pointer bg-gray-900'
-            ></video>
+              src={video?.asset.url}
+             className='lg:w-[700px] h-[800px] md:h-[700px] md:w-[350px] lg:h-[728px] w-[300px] rounded-2xl cursor-pointer bg-gray-800'
+            />
           </Link>
 
           {isHover && (
