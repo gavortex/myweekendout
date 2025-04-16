@@ -33,9 +33,9 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
 
   useEffect(() => {
     if (videoRef?.current) {
-      videoRef.current.muted = !isShowingOnHome; 
+      videoRef.current.muted = isVideoMuted;
     }
-  }, [isShowingOnHome]);
+  }, [isVideoMuted]);
 
   if (!isShowingOnHome) {
     return (
@@ -43,7 +43,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
         <Link href={`/detail/${_id}`}>
           <video
             loop
-            autoPlay
+            muted
             playsInline
             preload="metadata"
             ref={videoRef}
