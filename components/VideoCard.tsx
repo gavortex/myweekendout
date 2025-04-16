@@ -17,9 +17,10 @@ interface IProps {
 const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, likes }, isShowingOnHome }) => {
   const [playing, setPlaying] = useState(false);
   const [isHover, setIsHover] = useState(false);
-  const [autoPlay, setAutoPlay] = useState(false);
+  const [isVideoMuted, setIsVideoMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  
   const onVideoPress = () => {
     if (playing) {
       videoRef?.current?.pause();
@@ -31,12 +32,8 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
   };
 
   useEffect(() => {
-    if (isShowingOnHome) {
-      setAutoPlay(true);
-      videoRef?.current?.play().catch(() => {});
-      setPlaying(true);
-    } else {
-      setAutoPlay(false);
+    if (videoRef?.current) {
+      videoRef.current.muted = !isShowingOnHome; 
     }
   }, [isShowingOnHome]);
 
@@ -46,6 +43,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
         <Link href={`/detail/${_id}`}>
           <video
             loop
+            autoPlay
             playsInline
             preload="metadata"
             ref={videoRef}
@@ -53,85 +51,89 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
             className="rounded-2xl bg-gray-600 w-full h-[500px] object-cover"
           />
         </Link>
-        <div className="flex gap-2 -mt-8 items-center ml-4">
-          <p className="text-white text-lg font-medium flex gap-1 items-center">
-            <BsPlay className="text-2xl text-red" />
+        <div className='flex gap-2 -mt-8 items-center ml-4'>
+          <p className='text-white text-lg font-medium flex gap-1 items-center'>
+            <BsPlay className='text-2xl text-red' />
             {likes?.length || 0}
           </p>
         </div>
         <Link href={`/detail/${_id}`}>
-          <p className="mt-5 text-md text-gray-800 cursor-pointer w-210">{caption}</p>
+          <p className='mt-5 text-md text-gray-800 cursor-pointer w-210'>
+            {caption}
+          </p>
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col border-b-2 border-gray-200 pb-6">
-      <div className="flex gap-3 p-2 cursor-pointer font-semibold rounded">
-        <div className="md:w-16 md:h-16 w-10 h-10">
+    <div className='flex flex-col border-b-2 border-gray-200 pb-6'>
+      <div className='flex gap-3 p-2 cursor-pointer font-semibold rounded'>
+        <div className='md:w-16 md:h-16 w-10 h-10'>
           <Link href={`/profile/${postedBy?._id}`}>
             <Image
               width={24}
               height={24}
-              className="rounded-full"
+              className='rounded-full'
               src={postedBy?.image}
-              alt="user-profile"
-              layout="responsive"
+              alt='user-profile'
+              layout='responsive'
             />
           </Link>
         </div>
         <div>
           <Link href={`/profile/${postedBy?._id}`}>
-            <div className="flex items-center gap-1">
-              <p className="flex gap-2 items-center md:text-md font-bold text-red">
+            <div className='flex items-center gap-1'>
+              <p className='flex gap-2 items-center md:text-md font-bold text-red'>
                 {postedBy.userName}
-                <GoVerified className="text-blue-400 text-md" />
+                <GoVerified className='text-blue-400 text-md' />
               </p>
-              <p className="capitalize font-medium text-xs text-gray-500 hidden md:block">
+              <p className='capitalize font-medium text-xs text-gray-500 hidden md:block'>
                 {postedBy.userName}
               </p>
             </div>
           </Link>
           <Link href={`/detail/${_id}`}>
-            <p className="mt-1 font-xs">{caption}</p>
+            <p className='mt-1 font-xs'>{caption}</p>
           </Link>
         </div>
       </div>
 
-      <div className="lg:ml-20 flex gap-4 relative">
+      <div className='lg:ml-20 flex gap-4 relative'>
         <div
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
-          className="rounded-3xl"
+          className='rounded-3xl'
         >
           <Link href={`/detail/${_id}`}>
             <video
               loop
               ref={videoRef}
               src={video?.asset.url}
-              autoPlay={autoPlay}
-              playsInline
-              preload="auto"
-              className="lg:w-[700px] h-[600px] md:h-[500px] md:w-[350px] lg:h-[728px] w-[300px] rounded-2xl cursor-pointer bg-gray-600"
-              
+             className='lg:w-[700px] h-[600px] md:h-[500px] md:w-[350px] lg:h-[728px] w-[300px] rounded-2xl cursor-pointer bg-gray-600'
             />
           </Link>
 
           {isHover && (
-            <div className="absolute bottom-6 cursor-pointer left-8 md:left-14 lg:left-0 flex gap-10 lg:justify-between w-[100px] md:w-[50px] lg:w-[600px] p-3">
+            <div className='absolute bottom-6 cursor-pointer left-8 md:left-14 lg:left-0 flex gap-10 lg:justify-between w-[100px] md:w-[50px] lg:w-[600px] p-3'>
               {playing ? (
                 <button onClick={onVideoPress}>
-                  <BsFillPauseFill className="text-red text-2xl lg:text-4xl" />
+                  <BsFillPauseFill className='text-red text-2xl lg:text-4xl' />
                 </button>
               ) : (
                 <button onClick={onVideoPress}>
-                  <BsFillPlayFill className="text-red text-2xl lg:text-4xl" />
+                  <BsFillPlayFill className='text-red text-2xl lg:text-4xl' />
                 </button>
               )}
-              <button>
-                <HiVolumeOff className="text-red text-2xl lg:text-4xl" />
-              </button>
+              {isVideoMuted ? (
+                <button onClick={() => setIsVideoMuted(false)}>
+                  <HiVolumeOff className='text-red text-2xl lg:text-4xl' />
+                </button>
+              ) : (
+                <button onClick={() => setIsVideoMuted(true)}>
+                  <HiVolumeUp className='text-red text-2xl lg:text-4xl' />
+                </button>
+              )}
             </div>
           )}
         </div>
