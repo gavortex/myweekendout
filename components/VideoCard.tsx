@@ -162,7 +162,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
               handleDislike={() => console.log('Disliked')}
             />
             <button
-              className="bg-primary p-2 rounded-full text-white"
+              className="bg-red p-2 rounded-full text-white"
               onClick={() => setShowComments((prev) => !prev)}
             >
               <MdOutlineInsertComment className="text-xl md:text-2xl" />
@@ -171,7 +171,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
 
           {/* Comments Panel */}
           {showComments && (
-            <div className="absolute bottom-0 left-0 w-full z-40 bg-white rounded-t-xl shadow-lg">
+            <div className="absolute bottom-0 left-0 w-full z-40 bg-black rounded-t-xl shadow-lg">
               <Comments
                 comment={comment}
                 setComment={setComment}
