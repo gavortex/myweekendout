@@ -7,20 +7,25 @@ import Link from 'next/link';
 import { HiVolumeUp, HiVolumeOff } from 'react-icons/hi';
 import { BsFillPlayFill, BsFillPauseFill, BsPlay } from 'react-icons/bs';
 import { GoVerified } from 'react-icons/go';
+import { MdOutlineInsertComment } from 'react-icons/md';
 import { Video } from './../types';
+import LikeButton from './LikeButton';
+import Comments from './Comments';
 
 interface IProps {
   post: Video;
   isShowingOnHome?: boolean;
 }
 
-const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, likes }, isShowingOnHome }) => {
+const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, likes, comments }, isShowingOnHome }) => {
   const [playing, setPlaying] = useState(false);
   const [isHover, setIsHover] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [showComments, setShowComments] = useState(false);
+  const [comment, setComment] = useState('');
+  const [isPostingComment, setIsPostingComment] = useState(false);
 
-  
   const onVideoPress = () => {
     if (playing) {
       videoRef?.current?.pause();
@@ -36,6 +41,16 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
       videoRef.current.muted = isVideoMuted;
     }
   }, [isVideoMuted]);
+
+  const addComment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (comment) {
+      setIsPostingComment(true);
+      // API logic to add comment
+      setComment('');
+      setIsPostingComment(false);
+    }
+  };
 
   if (!isShowingOnHome) {
     return (
@@ -103,17 +118,18 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
         <div
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
-          className='rounded-3xl'
+          className='rounded-3xl relative'
         >
           <Link href={`/detail/${_id}`}>
             <video
               loop
               ref={videoRef}
               src={video?.asset.url}
-             className='lg:w-[700px] h-[600px] md:h-[500px] md:w-[350px] lg:h-[728px] w-[300px] rounded-2xl cursor-pointer bg-gray-600'
+              className='lg:w-[700px] h-[600px] md:h-[500px] md:w-[350px] lg:h-[728px] w-[300px] rounded-2xl cursor-pointer bg-gray-600'
             />
           </Link>
 
+          {/* Overlay Controls (play/pause + mute) */}
           {isHover && (
             <div className='absolute bottom-6 cursor-pointer left-8 md:left-14 lg:left-0 flex gap-10 lg:justify-between w-[100px] md:w-[50px] lg:w-[600px] p-3'>
               {playing ? (
@@ -134,6 +150,35 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
                   <HiVolumeUp className='text-red text-2xl lg:text-4xl' />
                 </button>
               )}
+            </div>
+          )}
+
+          {/* Overlay Like & Comment Buttons (right side like TikTok) */}
+          <div className="absolute right-4 bottom-20 flex flex-col gap-6 items-center z-50">
+            <LikeButton
+              likes={likes}
+              flex="flex"
+              handleLike={() => console.log('Liked')}
+              handleDislike={() => console.log('Disliked')}
+            />
+            <button
+              className="bg-primary p-2 rounded-full text-white"
+              onClick={() => setShowComments((prev) => !prev)}
+            >
+              <MdOutlineInsertComment className="text-xl md:text-2xl" />
+            </button>
+          </div>
+
+          {/* Comments Panel */}
+          {showComments && (
+            <div className="absolute bottom-0 left-0 w-full z-40 bg-white rounded-t-xl shadow-lg">
+              <Comments
+                comment={comment}
+                setComment={setComment}
+                addComment={addComment}
+                comments={comments}
+                isPostingComment={isPostingComment}
+              />
             </div>
           )}
         </div>
