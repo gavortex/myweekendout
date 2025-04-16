@@ -33,7 +33,7 @@ const Navbar = () => {
   return (
     <div className='w-full flex justify-between items-center border-b-2 border-gray-200 py-2 px-4'>
       <Link href='/'>
-        <div className='w-[250px] md:w-[80px] md:h-[60px] h-[100px]'>
+        <div className='w-[250px] md:w-[80px] md:h-[60px] h-[80px]'>
           <Image
             className='cursor-pointer'
             src={Logo}
@@ -66,7 +66,7 @@ const Navbar = () => {
         {user ? (
           <div className='flex gap-5 md:gap-10'>
             <Link href='/upload'>
-              <button className='border-2 px-2 md:px-4 text-md font-semibold flex items-center gap-2'>
+              <button className='border-2 px-2 md:px-4 text-md font-semibold text-white flex items-center gap-2'>
                 <IoMdAdd className='text-xl' />{' '}
                 <span className='hidden md:block'>Upload </span>
               </button>
