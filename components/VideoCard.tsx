@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { HiVolumeUp, HiVolumeOff } from 'react-icons/hi';
 import { BsFillPlayFill, BsFillPauseFill, BsPlay } from 'react-icons/bs';
 import { GoVerified } from 'react-icons/go';
-
+import VideoThumbnail from './VideoThumbnail';
 import { Video } from './../types';
 
 interface IProps {
@@ -42,13 +42,7 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
     return (
       <div>
         <Link href={`/detail/${_id}`}>
-          <video
-            loop
-            src={video?.asset.url}
-            ref={videoRef}
-             className='w-[400px] h-[500px] md:w-full rounded-xl cursor-pointer'
-           
-          />
+        <VideoThumbnail src={video?.asset.url} />
         </Link>
         <div className='flex gap-2 -mt-8 items-center ml-4'>
           <p className='text-white text-lg font-medium flex gap-1 items-center'>
