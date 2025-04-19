@@ -25,7 +25,7 @@ const LikeButton: NextPage<IProps> = ({ likes, flex, handleLike }) => {
         className="mt-4 flex flex-col justify-center items-center cursor-pointer"
         onClick={handleLike}
       >
-        <div className="bg-primary rounded-full p-2 md:p-4 text-[#F51997]">
+        <div className="bg-transparent rounded-full p-2 md:p-4 text-[#F51997]">
           <MdFavorite
             className={`text-lg md:text-2xl ${alreadyLiked ? 'fill-current' : 'fill-white'}`}
           />

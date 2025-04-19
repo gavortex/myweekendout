@@ -56,6 +56,25 @@ const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, li
     }
   };
 
+  const handleLike = async () => {
+    if (!userProfile) return;
+  
+    try {
+      const res = await axios.put('/api/like', {
+        userId: (userProfile as any)?._id,
+        postId: _id,
+        like: true, 
+      });
+      console.log('Like successful', res.data);
+    } catch (err) {
+      console.error('Like failed:', err);
+    }
+  };
+
+
+
+
+
   return (
     <div className='flex flex-col border-b-2 border-gray-200 pb-6 relative'>
       {/* Profile & Caption */}
@@ -95,6 +114,7 @@ const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, li
             loop
             muted
             playsInline
+             preload="metadata"
             ref={videoRef}
             src={video?.asset.url}
             className='lg:w-[700px] h-[600px] md:h-[500px] md:w-[350px] lg:h-[728px] w-[300px] rounded-2xl cursor-pointer bg-gray-600'
@@ -127,12 +147,11 @@ const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, li
 
           {/* Like & Comment Buttons */}
           <div className="absolute right-4 bottom-20 flex flex-col gap-6 items-center z-50">
-            <LikeButton
+          <LikeButton
               likes={likes}
               flex="flex"
-              handleLike={() => console.log('Liked')}
-             
-            />
+              handleLike={handleLike}
+              />
            <button
               className="bg-red p-2 rounded-full text-white"
               onClick={async () => {
