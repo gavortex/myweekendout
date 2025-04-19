@@ -100,8 +100,8 @@ const Comments = ({
 
     
       {userProfile && (
-    <div className="p-4 border-t bg-white relative">
-      <div className="absolute bottom-16 left-4 z-10">
+    <div className="sticky bottom-10 p-4 pb-10 border-t bg-white">
+      <div className="absolute -top-60 pb-20 left-4 z-10">
         {showEmojiPicker && <Picker onEmojiClick={onEmojiClick} />}
       </div>
 
@@ -118,13 +118,13 @@ const Comments = ({
           type="text"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          placeholder="Add a comment..."
+          placeholder="😀 Add a comment..."
           className="flex-1 border rounded-full px-4 py-2 focus:outline-none"
         />
         <button
           type="submit"
           disabled={isPostingComment}
-          className="p-2 rounded-full bg-primary text-white disabled:opacity-50"
+          className="p-2 rounded-full bg-primary text-black disabled:opacity-50"
         >
           {isPostingComment ? 'Posting...' : <BiSend className="text-xl" />}
         </button>
