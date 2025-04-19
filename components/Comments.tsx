@@ -55,13 +55,50 @@ const Comments = ({
   }, []);
 
   return (
-    <div
-      ref={wrapperRef}
-      className="h-full flex flex-col bg-transparent"
-    >
-      <div className="flex-1 overflow-y-auto px-4">
+    <div ref={wrapperRef} className="h-full flex flex-col bg-transparent">
+  
+      {/* 🆕 Input Box on Top */}
+      {userProfile && (
+        <div className="sticky top-0 z-20 p-4 bg-white border-b">
+          <div className="relative">
+            {showEmojiPicker && (
+              <div className="absolute top-full left-0 z-50">
+                <Picker onEmojiClick={onEmojiClick} />
+              </div>
+            )}
+          </div>
+  
+          <form onSubmit={handleSubmit} className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowEmojiPicker((v) => !v)}
+              className="text-2xl"
+            >
+              <BiSmile />
+            </button>
+  
+            <input
+              type="text"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="😀 Add a comment..."
+              className="flex-1 border rounded-full px-4 py-2 focus:outline-none"
+            />
+            <button
+              type="submit"
+              disabled={isPostingComment}
+              className="p-2 rounded-full bg-primary text-black disabled:opacity-50"
+            >
+              {isPostingComment ? 'Posting...' : <BiSend className="text-xl" />}
+            </button>
+          </form>
+        </div>
+      )}
+  
+      {/* 💬 Comment List */}
+      <div className="flex-1 overflow-y-auto px-4 pt-2 pb-10">
         {comments?.length > 0 ? (
-          comments.map((item, idx) => (
+          [...comments].reverse().map((item, idx) => (
             <React.Fragment key={idx}>
               {allUsers?.map(
                 (user: IUser) =>
@@ -92,46 +129,10 @@ const Comments = ({
             </React.Fragment>
           ))
         ) : (
-          <div className="pt-4">
-            
-          </div>
+          <div className="pt-4 text-center text-gray-500">No comments yet</div>
         )}
       </div>
-
-    
-      {userProfile && (
-    <div className="sticky bottom-10 p-4 pb-10 border-t bg-white">
-      <div className="absolute -top-60 pb-20 left-4 z-10">
-        {showEmojiPicker && <Picker onEmojiClick={onEmojiClick} />}
-      </div>
-
-      <form onSubmit={handleSubmit} className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={() => setShowEmojiPicker((v) => !v)}
-          className="text-2xl"
-        >
-          <BiSmile />
-        </button>
-
-        <input
-          type="text"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          placeholder="😀 Add a comment..."
-          className="flex-1 border rounded-full px-4 py-2 focus:outline-none"
-        />
-        <button
-          type="submit"
-          disabled={isPostingComment}
-          className="p-2 rounded-full bg-primary text-black disabled:opacity-50"
-        >
-          {isPostingComment ? 'Posting...' : <BiSend className="text-xl" />}
-        </button>
-      </form>
     </div>
-  )}
-</div>
   );
 };
 
