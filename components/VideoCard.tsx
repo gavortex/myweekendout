@@ -44,7 +44,7 @@ const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, li
     const video = videoRef.current;
   
     if (isMobile && video) {
-      video.muted = true;
+      video.muted = false;
       video.playsInline = true;
   
       // Wait a bit before trying to play, helps with render timing
