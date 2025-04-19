@@ -91,7 +91,7 @@ const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, li
         </div>
         <div>
           <div className='flex items-center gap-1'>
-            <p className='flex gap-2 items-center md:text-md font-bold text-red'>
+            <p className='flex gap-2 items-center md:text-md font-bold text-gray-600'>
               {postedBy.userName}
               <GoVerified className='text-blue-400 text-md' />
             </p>
@@ -99,7 +99,7 @@ const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, li
               {postedBy.userName}
             </p>
           </div>
-          <p className='mt-1 font-xs'>{caption}</p>
+          <p className='mt-1 text-gray-700 font-xs'>{caption}</p>
         </div>
       </div>
 
@@ -114,7 +114,7 @@ const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, li
             loop
             muted
             playsInline
-             preload="metadata"
+             preload="auto"
             ref={videoRef}
             src={video?.asset.url}
             className='lg:w-[700px] h-[600px] md:h-[500px] md:w-[350px] lg:h-[728px] w-[300px] rounded-2xl cursor-pointer bg-gray-600'
