@@ -1,9 +1,5 @@
-'use client';
-
 import React, { useEffect, useRef, useState } from 'react';
-import { NextPage } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
 import { HiVolumeUp, HiVolumeOff } from 'react-icons/hi';
 import { BsFillPlayFill, BsFillPauseFill, BsPlay } from 'react-icons/bs';
 import { GoVerified } from 'react-icons/go';
@@ -11,13 +7,17 @@ import { MdOutlineInsertComment } from 'react-icons/md';
 import { Video } from './../types';
 import LikeButton from './LikeButton';
 import Comments from './Comments';
+import useAuthStore from '../store/authStore';
+import { useRouter } from 'next/router';
+import axios from 'axios';
+
 
 interface IProps {
   post: Video;
   isShowingOnHome?: boolean;
 }
 
-const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, likes, comments }, isShowingOnHome }) => {
+const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, likes, comments }, isShowingOnHome }) => {
   const [playing, setPlaying] = useState(false);
   const [isHover, setIsHover] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
@@ -25,7 +25,10 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState('');
   const [isPostingComment, setIsPostingComment] = useState(false);
+  const { userProfile } = useAuthStore();
+  const router = useRouter();
 
+  
   const onVideoPress = () => {
     if (playing) {
       videoRef?.current?.pause();
@@ -46,92 +49,59 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
     e.preventDefault();
     if (comment) {
       setIsPostingComment(true);
-      // API logic to add comment
+      // Simulate API call here
+      console.log('New Comment:', comment);
       setComment('');
       setIsPostingComment(false);
     }
   };
 
-  if (!isShowingOnHome) {
-    return (
-      <div>
-        <Link href={`/detail/${_id}`}>
-          <video
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            ref={videoRef}
-            src={video?.asset.url}
-            className="rounded-2xl bg-gray-600 w-full h-[500px] object-cover"
-          />
-        </Link>
-        <div className='flex gap-2 -mt-8 items-center ml-4'>
-          <p className='text-white text-lg font-medium flex gap-1 items-center'>
-            <BsPlay className='text-2xl text-red' />
-            {likes?.length || 0}
-          </p>
-        </div>
-        <Link href={`/detail/${_id}`}>
-          <p className='mt-5 text-md text-gray-800 cursor-pointer w-210'>
-            {caption}
-          </p>
-        </Link>
-      </div>
-    );
-  }
-
   return (
-    <div className='flex flex-col border-b-2 border-gray-200 pb-6'>
+    <div className='flex flex-col border-b-2 border-gray-200 pb-6 relative'>
+      {/* Profile & Caption */}
       <div className='flex gap-3 p-2 cursor-pointer font-semibold rounded'>
         <div className='md:w-16 md:h-16 w-10 h-10'>
-          <Link href={`/profile/${postedBy?._id}`}>
-            <Image
-              width={24}
-              height={24}
-              className='rounded-full'
-              src={postedBy?.image}
-              alt='user-profile'
-              layout='responsive'
-            />
-          </Link>
+          <Image
+            width={24}
+            height={24}
+            className='rounded-full'
+            src={postedBy?.image}
+            alt='user-profile'
+            layout='responsive'
+          />
         </div>
         <div>
-          <Link href={`/profile/${postedBy?._id}`}>
-            <div className='flex items-center gap-1'>
-              <p className='flex gap-2 items-center md:text-md font-bold text-red'>
-                {postedBy.userName}
-                <GoVerified className='text-blue-400 text-md' />
-              </p>
-              <p className='capitalize font-medium text-xs text-gray-500 hidden md:block'>
-                {postedBy.userName}
-              </p>
-            </div>
-          </Link>
-          <Link href={`/detail/${_id}`}>
-            <p className='mt-1 font-xs'>{caption}</p>
-          </Link>
+          <div className='flex items-center gap-1'>
+            <p className='flex gap-2 items-center md:text-md font-bold text-red'>
+              {postedBy.userName}
+              <GoVerified className='text-blue-400 text-md' />
+            </p>
+            <p className='capitalize font-medium text-xs text-gray-500 hidden md:block'>
+              {postedBy.userName}
+            </p>
+          </div>
+          <p className='mt-1 font-xs'>{caption}</p>
         </div>
       </div>
 
+      {/* Video Section */}
       <div className='lg:ml-20 flex gap-4 relative'>
         <div
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
           className='rounded-3xl relative'
         >
-          <Link href={`/detail/${_id}`}>
           <video
-              loop
-              muted
-              playsInline
-              ref={videoRef}
-              src={video?.asset.url}
-              className='lg:w-[700px] h-[600px] md:h-[500px] md:w-[350px] lg:h-[728px] w-[300px] rounded-2xl cursor-pointer bg-gray-600'
-            />
-          </Link>
+            loop
+            muted
+            playsInline
+            ref={videoRef}
+            src={video?.asset.url}
+            className='lg:w-[700px] h-[600px] md:h-[500px] md:w-[350px] lg:h-[728px] w-[300px] rounded-2xl cursor-pointer bg-gray-600'
+            onClick={onVideoPress}
+          />
 
-          {/* Overlay Controls (play/pause + mute) */}
+          {/* Overlay Controls */}
           {isHover && (
             <div className='absolute bottom-6 cursor-pointer left-8 md:left-14 lg:left-0 flex gap-10 lg:justify-between w-[100px] md:w-[50px] lg:w-[600px] p-3'>
               {playing ? (
@@ -155,32 +125,48 @@ const VideoCard: NextPage<IProps> = ({ post: { caption, postedBy, video, _id, li
             </div>
           )}
 
-          {/* Overlay Like & Comment Buttons (right side like TikTok) */}
+          {/* Like & Comment Buttons */}
           <div className="absolute right-4 bottom-20 flex flex-col gap-6 items-center z-50">
             <LikeButton
               likes={likes}
               flex="flex"
               handleLike={() => console.log('Liked')}
-              handleDislike={() => console.log('Disliked')}
+             
             />
-            <button
+           <button
               className="bg-red p-2 rounded-full text-white"
-              onClick={() => setShowComments((prev) => !prev)}
-            >
+              onClick={async () => {
+               try {
+             // optional: pre-fetch or log view
+             await axios.get(`/api/post/${_id}`);
+              router.push(`/detail/${_id}?comment=true`);
+             } catch (error) {
+             console.error('Failed to fetch post details:', error);
+               }
+              }}
+             >
               <MdOutlineInsertComment className="text-xl md:text-2xl" />
             </button>
-          </div>
+             </div>
 
-          {/* Comments Panel */}
+          {/* Comments Section */}
           {showComments && (
-            <div className="absolute bottom-0 left-0 w-full z-40 bg-black rounded-t-xl shadow-lg">
-              <Comments
-                comment={comment}
-                setComment={setComment}
-                addComment={addComment}
-                comments={comments}
-                isPostingComment={isPostingComment}
-              />
+            <div
+              className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-end justify-center"
+              onClick={() => router.push(`/detail/${_id}?modal=true`)}
+            >
+              <div
+                className="bg-white w-full md:w-[250px] md:h-[650px] max-h-[700px] rounded-t-2xl p-4 overflow-y-scroll"
+                onClick={(e) => e.stopPropagation()} 
+              >
+                <Comments
+                  comment={comment}
+                  setComment={setComment}
+                  addComment={addComment}
+                  comments={comments}
+                  isPostingComment={isPostingComment}
+                />
+              </div>
             </div>
           )}
         </div>
