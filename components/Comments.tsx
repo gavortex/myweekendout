@@ -7,6 +7,8 @@ import { GoVerified } from 'react-icons/go';
 import { BiSend } from 'react-icons/bi';
 import useAuthStore from '../store/authStore';
 import { IUser } from '../types';
+import Picker, { EmojiClickData } from 'emoji-picker-react';
+import { BiSmile } from 'react-icons/bi';
 
 interface IProps {
   isPostingComment: boolean;
@@ -33,6 +35,14 @@ const Comments = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [showInput, setShowInput] = useState(true);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  const onEmojiClick = (emojiData: EmojiClickData) => {
+    setComment((prev) => prev + emojiData.emoji);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); addComment(e); setShowEmojiPicker(false); };
+
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -88,22 +98,41 @@ const Comments = ({
         )}
       </div>
 
-      {userProfile && <div className='absolute bottom-0 left-0  pb-6 px-2 md:px-10 '>
-        <form onSubmit={addComment} className='flex gap-4'>
-          <input
-            value={comment}
-            onChange={(e) => setComment(e.target.value.trim())}
-            className='bg-primary px-6 py-4 text-md font-medium border-2 w-[350px] md:w-[700px] lg:w-[350px] border-gray-100 focus:outline-none focus:border-2 focus:border-gray-300 flex-1 rounded-lg'
-            placeholder="😀 Add a comment..."
-          />
-          <button className='text-md text-gray-400 ' onClick={addComment}>
-            {isPostingComment ? 'Posting...' : <BiSend className="text-xl" />}
-          </button>
-        </form>
-      </div>}
+    
+      {userProfile && (
+    <div className="p-4 border-t bg-white relative">
+      <div className="absolute bottom-16 left-4 z-10">
+        {showEmojiPicker && <Picker onEmojiClick={onEmojiClick} />}
+      </div>
+
+      <form onSubmit={handleSubmit} className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setShowEmojiPicker((v) => !v)}
+          className="text-2xl"
+        >
+          <BiSmile />
+        </button>
+
+        <input
+          type="text"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          placeholder="Add a comment..."
+          className="flex-1 border rounded-full px-4 py-2 focus:outline-none"
+        />
+        <button
+          type="submit"
+          disabled={isPostingComment}
+          className="p-2 rounded-full bg-primary text-white disabled:opacity-50"
+        >
+          {isPostingComment ? 'Posting...' : <BiSend className="text-xl" />}
+        </button>
+      </form>
     </div>
+  )}
+</div>
   );
 };
-
 
 export default Comments;
