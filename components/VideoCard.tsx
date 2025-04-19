@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { HiVolumeUp, HiVolumeOff } from 'react-icons/hi';
-import { BsFillPlayFill, BsFillPauseFill, BsPlay } from 'react-icons/bs';
+import { BsFillPlayFill, BsFillPauseFill } from 'react-icons/bs';
 import { GoVerified } from 'react-icons/go';
 import { MdOutlineInsertComment } from 'react-icons/md';
 import { Video } from './../types';
@@ -11,13 +11,18 @@ import useAuthStore from '../store/authStore';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
-
 interface IProps {
   post: Video;
   isShowingOnHome?: boolean;
+  currentlyPlayingId: string | null;
+  setCurrentlyPlayingId: (id: string) => void;
 }
 
-const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, likes, comments }, isShowingOnHome }) => {
+const VideoCard: React.FC<IProps> = ({
+  post: { caption, postedBy, video, _id, likes, comments },
+  currentlyPlayingId,
+  setCurrentlyPlayingId
+}) => {
   const [playing, setPlaying] = useState(false);
   const [isHover, setIsHover] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
@@ -28,7 +33,6 @@ const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, li
   const { userProfile } = useAuthStore();
   const router = useRouter();
 
-  
   const onVideoPress = () => {
     if (playing) {
       videoRef?.current?.pause();
@@ -40,22 +44,35 @@ const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, li
   };
 
   useEffect(() => {
-    const isMobile = typeof window !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const video = videoRef.current;
-  
-    if (isMobile && video) {
-      video.muted = false;
-      video.playsInline = true;
-  
-      // Wait a bit before trying to play, helps with render timing
-      setTimeout(() => {
-        video.play().catch((err) => {
-          console.log('Mobile autoplay prevented:', err);
-        });
-      }, 500);
-    }
-  }, []);
+    if (!videoRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setCurrentlyPlayingId(_id);
+        }
+      },
+      { threshold: 0.75 }
+    );
+    observer.observe(videoRef.current);
+    return () => {
+      if (videoRef.current) observer.unobserve(videoRef.current);
+    };
+  }, [setCurrentlyPlayingId, _id]);
 
+  useEffect(() => {
+    const videoEl = videoRef.current;
+    if (!videoEl) return;
+
+    if (currentlyPlayingId === _id) {
+      videoEl
+        .play()
+        .then(() => setPlaying(true))
+        .catch(() => setPlaying(false));
+    } else {
+      videoEl.pause();
+      setPlaying(false);
+    }
+  }, [currentlyPlayingId, _id]);
 
   useEffect(() => {
     if (videoRef?.current) {
@@ -67,7 +84,6 @@ const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, li
     e.preventDefault();
     if (comment) {
       setIsPostingComment(true);
-      // Simulate API call here
       console.log('New Comment:', comment);
       setComment('');
       setIsPostingComment(false);
@@ -76,22 +92,17 @@ const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, li
 
   const handleLike = async () => {
     if (!userProfile) return;
-  
     try {
       const res = await axios.put('/api/like', {
         userId: (userProfile as any)?._id,
         postId: _id,
-        like: true, 
+        like: true,
       });
       console.log('Like successful', res.data);
     } catch (err) {
       console.error('Like failed:', err);
     }
   };
-
-
-
-
 
   return (
     <div className='flex flex-col border-b-2 border-gray-200 pb-6 relative'>
@@ -132,7 +143,7 @@ const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, li
             loop
             muted
             playsInline
-             preload="auto"
+            preload='auto'
             ref={videoRef}
             src={video?.asset.url}
             className='lg:w-[700px] h-[600px] md:h-[500px] md:w-[350px] lg:h-[728px] w-[300px] rounded-2xl cursor-pointer bg-gray-600'
@@ -165,26 +176,21 @@ const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, li
 
           {/* Like & Comment Buttons */}
           <div className="absolute right-4 bottom-20 flex flex-col gap-6 items-center z-50">
-          <LikeButton
-              likes={likes}
-              flex="flex"
-              handleLike={handleLike}
-              />
-           <button
+            <LikeButton likes={likes} flex="flex" handleLike={handleLike} />
+            <button
               className="bg-red p-2 rounded-full text-white"
               onClick={async () => {
-               try {
-             // optional: pre-fetch or log view
-             await axios.get(`/api/post/${_id}`);
-              router.push(`/detail/${_id}?comment=true`);
-             } catch (error) {
-             console.error('Failed to fetch post details:', error);
-               }
+                try {
+                  await axios.get(`/api/post/${_id}`);
+                  router.push(`/detail/${_id}?comment=true`);
+                } catch (error) {
+                  console.error('Failed to fetch post details:', error);
+                }
               }}
-             >
+            >
               <MdOutlineInsertComment className="text-xl md:text-2xl" />
             </button>
-             </div>
+          </div>
 
           {/* Comments Section */}
           {showComments && (
@@ -194,7 +200,7 @@ const VideoCard: React.FC<IProps> = ({ post: { caption, postedBy, video, _id, li
             >
               <div
                 className="bg-white w-full md:w-[250px] md:h-[650px] max-h-[700px] rounded-t-2xl p-4 overflow-y-scroll"
-                onClick={(e) => e.stopPropagation()} 
+                onClick={(e) => e.stopPropagation()}
               >
                 <Comments
                   comment={comment}

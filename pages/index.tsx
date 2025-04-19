@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 import VideoCard from '../components/VideoCard';
@@ -11,13 +11,23 @@ interface IProps {
 }
 
 const Home = ({ videos }: IProps) => {
+  const [currentlyPlayingId, setCurrentlyPlayingId] = useState<string | null>(null);
+
   return (
     <div className='flex flex-col gap-10 videos h-full'>
-      {videos.length 
-        ? videos?.map((video: Video) => (
-          <VideoCard post={video} isShowingOnHome key={video._id} />
-        )) 
-        : <NoResults text={`No Videos`} />}
+      {videos.length ? (
+        videos.map((video: Video) => (
+          <VideoCard
+            key={video._id}
+            post={video}
+            isShowingOnHome
+            currentlyPlayingId={currentlyPlayingId}
+            setCurrentlyPlayingId={setCurrentlyPlayingId}
+          />
+        ))
+      ) : (
+        <NoResults text="No Videos" />
+      )}
     </div>
   );
 };
@@ -31,10 +41,10 @@ export const getServerSideProps = async ({
 }) => {
   let response = await axios.get(`${BASE_URL}/api/post`);
 
-  if(topic) {
+  if (topic) {
     response = await axios.get(`${BASE_URL}/api/discover/${topic}`);
   }
-  
+
   return {
     props: { videos: response.data },
   };
