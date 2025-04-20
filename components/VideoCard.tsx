@@ -75,8 +75,12 @@ const VideoCard: React.FC<IProps> = ({
   }, [currentlyPlayingId, _id]);
 
   useEffect(() => {
-    if (videoRef?.current) {
-      videoRef.current.muted = isVideoMuted;
+    const video = videoRef.current;
+    if (video) {
+      video.muted = isVideoMuted;
+      if (!isVideoMuted && video.paused) {
+        video.play().catch((err) => console.log("Failed to play unmuted video:", err));
+      }
     }
   }, [isVideoMuted]);
 
@@ -109,7 +113,7 @@ const VideoCard: React.FC<IProps> = ({
     const video = videoRef.current;
   
     if (isMobile && video) {
-      video.muted = false;
+      video.muted = true;
       video.playsInline = true;
   
       // Wait a bit before trying to play, helps with render timing
