@@ -1,6 +1,4 @@
 import React from 'react';
-import { BASE_URL } from '../utils';
-import axios from 'axios';
 import NoResults from '../components/NoResults';
 
 
@@ -15,7 +13,7 @@ const LiveFeed = ({ videos }: IProps) => {
       <div className="flex justify-center items-center h-screen">
         <div className="bg-red-500 text-white px-6 py-3 rounded-lg border-2 border-white shadow-lg transform hover:scale-105 transition-transform">
           <h1 className="text-2xl font-bold text-center">
-            🚀 Live Streaming Feature
+            🚀 Live Streaming Features
             <br />
             Coming Soon!
           </h1>
