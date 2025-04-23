@@ -1,15 +1,23 @@
-import { BsCode, BsEmojiSunglasses } from 'react-icons/bs';
-import { GiCakeSlice, GiGalaxy, GiLipstick } from 'react-icons/gi';
-import { FaPaw, FaMedal, FaGamepad, FaMusic, FaPumpMedical, FaMoneyBill, FaVimeoV } from 'react-icons/fa';
+import { BsCode, BsEmojiLaughing, BsEmojiSunglasses } from 'react-icons/bs';
+import { GiCakeSlice, GiGalaxy, GiLipstick, GiOpenBook } from 'react-icons/gi';
+import { FaMedal, FaMusic, FaPumpMedical, FaMoneyBill, FaVimeoV } from 'react-icons/fa';
 
 export const topics = [
   {
     name: 'Politics',
-    icon: <BsCode />,
+    icon: <BsCode  />,
   },
   {
     name: 'Deblozay',
     icon: <BsEmojiSunglasses />,
+  },
+  {
+    name: 'Comedy',
+    icon: <BsEmojiLaughing />,
+  },
+  {
+    name: 'Learning',
+    icon: <GiOpenBook/>,
   },
   {
     name: 'Finance',
