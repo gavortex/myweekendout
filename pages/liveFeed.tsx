@@ -8,10 +8,10 @@ const LiveFeed = () => {
           <h1 className="text-3xl font-extrabold text-center">
             🚀 Live Streaming Features
             <br />
-            Coming Soon!
+            Coming Soon
           </h1>
           <p className="mt-4 text-center opacity-90 text-lg">
-            We're working hard to bring you live streaming capabilities.
+            We&apos;re working hard to bring you live streaming capabilities.
             <br />
             Stay tuned!
           </p>
