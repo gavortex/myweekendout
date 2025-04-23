@@ -71,11 +71,7 @@ const Navbar = () => {
                 <span className='hidden md:block'>Upload </span>
               </button>
             </Link>
-            <Link href="/liveFeed">
-              <button className="border-2 px-1 md:px-2 text-xs font-semibold text-white flex items-center gap-2 bg-red-500 hover:bg-red-600 transition">
-                Live
-              </button>
-             </Link>
+         
             {user.image && (
               <Link href={`/profile/${user._id}`}>
                 <div>
