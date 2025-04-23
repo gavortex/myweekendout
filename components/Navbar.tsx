@@ -73,7 +73,7 @@ const Navbar = () => {
             </Link>
             <Link href="/liveFeed">
               <button className="border-2 px-1 md:px-2 text-xs font-semibold text-white flex items-center gap-2 bg-red-500 hover:bg-red-600 transition">
-                Go Live
+                Live
               </button>
              </Link>
             {user.image && (
