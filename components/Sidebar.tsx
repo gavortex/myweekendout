@@ -16,7 +16,7 @@ const Sidebar: NextPage = () => {
 
     const userProfile = false;
 
-    const normalLink = 'flex items-center gap-3 hover:bg-primary p-3 justify-center xl:justify-start cursor-pointer font-semibold text-white rounded';
+    const normalLink = 'flex items-center gap-3 p-3 justify-center xl:justify-start cursor-pointer font-semibold text-white rounded';
   
     return (
       <div>
