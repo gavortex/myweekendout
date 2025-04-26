@@ -141,6 +141,7 @@ const VideoCard: React.FC<IProps> = ({
       window.addEventListener('touchstart', handleUserGesture);
     }
   }, []);
+  
 
   return (
     <div className='flex flex-col border-b-2 border-gray-200 pb-6 relative'>
