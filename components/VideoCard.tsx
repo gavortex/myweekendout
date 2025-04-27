@@ -111,16 +111,12 @@ const VideoCard: React.FC<IProps> = ({
   useEffect(() => {
     const isMobile = typeof window !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     const video = videoRef.current;
- 
+  
     if (isMobile && video) {
       video.muted = true;
       video.playsInline = true;
-
-      // Wait a bit before trying to play, helps with render timing
-      // Ensure muted on autoplay
-      video.muted = true;
   
-      // Try autoplay muted
+      // Wait a bit before trying to play, helps with render timing
       setTimeout(() => {
         video.play().catch((err) => {
           console.log('Mobile autoplay prevented:', err);
