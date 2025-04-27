@@ -113,10 +113,12 @@ const VideoCard: React.FC<IProps> = ({
     const video = videoRef.current;
   
     if (isMobile && video) {
-      video.muted = true;
       video.playsInline = true;
   
-      // Wait a bit before trying to play, helps with render timing
+      // Ensure muted on autoplay
+      video.muted = true;
+  
+      // Try autoplay muted
       setTimeout(() => {
         video.play().catch((err) => {
           console.log('Mobile autoplay prevented:', err);
@@ -139,6 +141,7 @@ const VideoCard: React.FC<IProps> = ({
       window.addEventListener('touchstart', handleUserGesture);
     }
   }, []);
+  
 
   return (
     <div className='flex flex-col border-b-2 border-gray-200 pb-6 relative'>
@@ -157,11 +160,11 @@ const VideoCard: React.FC<IProps> = ({
         <div>
           <div className='flex items-center gap-1'>
             <p className='flex gap-2 items-center md:text-md font-bold text-gray-600'>
-              {postedBy?.userName}
+              {postedBy.userName}
               <GoVerified className='text-blue-400 text-md' />
             </p>
             <p className='capitalize font-medium text-xs text-gray-500 hidden md:block'>
-              {postedBy?.userName}
+              {postedBy.userName}
             </p>
           </div>
           <p className='mt-1 text-gray-700 font-xs'>{caption}</p>

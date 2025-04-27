@@ -83,26 +83,22 @@ const Detail = ({ postDetails }: IProps) => {
 
             {/* Header */}
             <div className="p-4 flex items-center gap-3 border-b">
-            {post?.postedBy && (
-  <Link href={`/profile/${post.postedBy._id}`}>
-    <Image
-      width={40} height={40}
-      className="rounded-full cursor-pointer"
-      src={post.postedBy.image}
-      alt="user-profile"
-    />
-  </Link>
-)}
+              <Link href={`/profile/${post.postedBy._id}`}>
+                <Image
+                  width={40} height={40}
+                  className="rounded-full cursor-pointer"
+                  src={post.postedBy.image}
+                  alt="user-profile"
+                />
+              </Link>
+              <div>
+                <p className="font-bold flex items-center gap-1">
+                  {post.postedBy.userName} <GoVerified className="text-blue-400" />
+                </p>
+                <p className="text-gray-600 text-sm">{post.caption}</p>
+              </div>
+            </div>
 
-{post?.postedBy && (
-  <div>
-    <p className="font-bold flex items-center gap-1">
-      {post.postedBy.userName} <GoVerified className="text-blue-400" />
-    </p>
-    <p className="text-gray-600 text-sm">{post.caption}</p>
-  </div>
-     )}
-     </div>
             {/* Comments */}
             <div className="flex-1 flex flex-col">
             <Comments
