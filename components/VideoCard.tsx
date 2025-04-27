@@ -74,15 +74,19 @@ const VideoCard: React.FC<IProps> = ({
     }
   }, [currentlyPlayingId, _id]);
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      video.muted = isVideoMuted;
-      if (!isVideoMuted && video.paused) {
-        video.play().catch((err) => console.log("Failed to play unmuted video:", err));
+  useEffect(() => { 
+    if (videoRef?.current) {
+      videoRef.current.muted = isVideoMuted;
+      const video = videoRef.current;
+      if (video) {
+        video.muted = isVideoMuted;
+        if (!isVideoMuted && video.paused) {
+          video.play().catch((err) => console.log("Failed to play unmuted video:", err));
+        }
       }
     }
   }, [isVideoMuted]);
+  
 
   const addComment = async (e: React.FormEvent) => {
     e.preventDefault();
