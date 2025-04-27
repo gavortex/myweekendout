@@ -113,17 +113,32 @@ const VideoCard: React.FC<IProps> = ({
     const video = videoRef.current;
   
     if (isMobile && video) {
-      video.muted = true;
       video.playsInline = true;
-
-     
+  
+      // Ensure muted on autoplay
+      video.muted = true;
+  
+      // Try autoplay muted
       setTimeout(() => {
         video.play().catch((err) => {
           console.log('Mobile autoplay prevented:', err);
         });
       }, 500);
   
+      // Enable sound after user interaction
+      const handleUserGesture = () => {
+        video.muted = false;
+        video.play().catch((err) => {
+          console.log('Play after interaction failed:', err);
+        });
   
+        // Remove listener after first interaction
+        window.removeEventListener('click', handleUserGesture);
+        window.removeEventListener('touchstart', handleUserGesture);
+      };
+  
+      window.addEventListener('click', handleUserGesture);
+      window.addEventListener('touchstart', handleUserGesture);
     }
   }, []);
   
