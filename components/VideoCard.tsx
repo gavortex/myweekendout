@@ -75,12 +75,8 @@ const VideoCard: React.FC<IProps> = ({
   }, [currentlyPlayingId, _id]);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      video.muted = isVideoMuted;
-      if (!isVideoMuted && video.paused) {
-        video.play().catch((err) => console.log("Failed to play unmuted video:", err));
-      }
+    if (videoRef?.current) {
+      videoRef.current.muted = isVideoMuted;
     }
   }, [isVideoMuted]);
 
@@ -113,35 +109,17 @@ const VideoCard: React.FC<IProps> = ({
     const video = videoRef.current;
   
     if (isMobile && video) {
+      video.muted = false;
       video.playsInline = true;
   
-      // Ensure muted on autoplay
-      video.muted = true;
-  
-      // Try autoplay muted
+      // Wait a bit before trying to play, helps with render timing
       setTimeout(() => {
         video.play().catch((err) => {
           console.log('Mobile autoplay prevented:', err);
         });
       }, 500);
-  
-      // Enable sound after user interaction
-      const handleUserGesture = () => {
-        video.muted = false;
-        video.play().catch((err) => {
-          console.log('Play after interaction failed:', err);
-        });
-  
-        // Remove listener after first interaction
-        window.removeEventListener('click', handleUserGesture);
-        window.removeEventListener('touchstart', handleUserGesture);
-      };
-  
-      window.addEventListener('click', handleUserGesture);
-      window.addEventListener('touchstart', handleUserGesture);
     }
   }, []);
-  
 
   return (
     <div className='flex flex-col border-b-2 border-gray-200 pb-6 relative'>
