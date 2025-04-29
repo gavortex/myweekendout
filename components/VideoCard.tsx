@@ -109,15 +109,15 @@ const VideoCard: React.FC<IProps> = ({
     const video = videoRef.current;
   
     if (isMobile && video) {
-      video.muted = false;
+      video.muted = true;
       video.playsInline = true;
   
-      // Wait a bit before trying to play, helps with render timing
-      setTimeout(() => {
-        video.play().catch((err) => {
-          console.log('Mobile autoplay prevented:', err);
-        });
-      }, 500);
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => setPlaying(true))
+          .catch((err) => console.log('Autoplay prevented:', err));
+      }
     }
   }, []);
 
