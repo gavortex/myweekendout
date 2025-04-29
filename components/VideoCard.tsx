@@ -110,10 +110,8 @@ const VideoCard: React.FC<IProps> = ({
     const video = videoRef.current;
   
     if (isMobile && video) {
+      video.muted = false;
       video.playsInline = true;
-  
-      // Respect the mute state
-      video.muted = isVideoMuted;
   
       const playPromise = video.play();
       if (playPromise !== undefined) {
@@ -122,7 +120,7 @@ const VideoCard: React.FC<IProps> = ({
           .catch((err) => console.log('Autoplay prevented:', err));
       }
     }
-  }, [isVideoMuted]);
+  }, []);
 
   return (
     <div className='flex flex-col border-b-2 border-gray-200 pb-6 relative'>
@@ -161,11 +159,11 @@ const VideoCard: React.FC<IProps> = ({
         >
           <video
             loop
+            muted
             playsInline
             preload='auto'
             ref={videoRef}
             src={video?.asset.url}
-            muted={isVideoMuted} 
             className='lg:w-[700px] h-[600px] md:h-[500px] md:w-[350px] lg:h-[728px] w-[300px] rounded-2xl cursor-pointer bg-gray-600'
             onClick={onVideoPress}
           />
